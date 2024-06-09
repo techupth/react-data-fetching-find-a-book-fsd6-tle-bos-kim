@@ -5,6 +5,7 @@ import axios from "axios";
 function App() {
   const [searchText, setSearchText] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [Timer, setTimer] = useState(null);
 
   const searchBook = async (text) => {
     try {
@@ -19,9 +20,18 @@ function App() {
   };
 
   useEffect(() => {
-    if (searchText) {
-      searchBook(searchText);
+    if (Timer) {
+      clearTimeout(Timer);
     }
+
+    const timerId = setTimeout(() => {
+      if (searchText) {
+        searchBook(searchText);
+      }
+    }, 500);
+
+    setTimer(timerId);
+    return () => clearTimeout(timerId);
   }, [searchText]);
 
   return (
